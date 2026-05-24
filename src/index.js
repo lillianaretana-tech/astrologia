@@ -1,3 +1,4 @@
+// force redeploy 2026-05-24
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
