@@ -1,15 +1,13 @@
-// src/index.js
-
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type"
+  "Access-Control-Allow-Origin": "https://lilianaretana-tech.github.io",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
+  "Access-Control-Max-Age": "86400"
 };
 
 export default {
   async fetch(request, env) {
 
-    // Respuesta para CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -17,7 +15,19 @@ export default {
       });
     }
 
-    // Solo permitir POST
+    if (request.method === "GET") {
+      return new Response(JSON.stringify({
+        status: "ok",
+        message: "AstroGuía Worker funcionando"
+      }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders
+        }
+      });
+    }
+
     if (request.method !== "POST") {
       return new Response(JSON.stringify({
         error: "Method not allowed"
@@ -61,23 +71,8 @@ export default {
 
       const data = await groqResponse.json();
 
-      if (!groqResponse.ok) {
-        console.error("GROQ Error:", data);
-
-        return new Response(JSON.stringify({
-          error: data.error?.message || "GROQ API Error",
-          status: groqResponse.status
-        }), {
-          status: groqResponse.status,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders
-          }
-        });
-      }
-
       return new Response(JSON.stringify(data), {
-        status: 200,
+        status: groqResponse.status,
         headers: {
           "Content-Type": "application/json",
           ...corsHeaders
@@ -85,8 +80,6 @@ export default {
       });
 
     } catch (error) {
-      console.error("Worker Error:", error);
-
       return new Response(JSON.stringify({
         error: "Internal Server Error",
         details: error.message
