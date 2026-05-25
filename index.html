@@ -997,7 +997,7 @@
                                     </div>
                                     <div>
                                         <label style="font-size: 12px; color: var(--text-muted);">Año</label>
-                                        <input type="number" id="ano-nacimiento" min="1900" max="2025" placeholder="1990" required style="width: 100%;">
+                                        <input type="number" id="ano-nacimiento" min="1900" max="2026" placeholder="1990" required style="width: 100%;">
                                     </div>
                                 </div>
                             </div>
@@ -1027,7 +1027,8 @@
                     </form>
 
                     <p style="margin-top: 20px; font-size: 12px; color: var(--text-muted); text-align: center;">
-                        💡 Tus datos se guardan localmente en tu dispositivo. Nunca se comparten.
+                        💡 Tus datos se guardan localmente. Si usas el chat con IA, los datos necesarios
+                        para personalizar la respuesta se envían al servicio de IA.
                     </p>
                 </div>
             </div>
@@ -1107,6 +1108,17 @@
                     <div class="section-title">
                         <span class="section-title-icon">✨</span>
                         Herramientas Astrológicas
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--accent-gold);">
+                        <h3 class="card-title">👥 Estudio para otra persona</h3>
+                        <p id="study-subject-label" style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px;">
+                            Los estudios actuales utilizan tu perfil.
+                        </p>
+                        <div class="action-buttons">
+                            <button class="btn btn-gold btn-small" onclick="showScreen('guest-study-screen')">Nuevo estudio →</button>
+                            <button id="return-own-profile-btn" class="btn btn-secondary btn-small" onclick="clearStudySubject()" style="display: none;">Volver a mi perfil</button>
+                        </div>
                     </div>
 
                     <div class="two-col">
@@ -1213,6 +1225,73 @@
                     <div class="card">
                         <div id="readings-history"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             PANTALLA: ESTUDIO PARA OTRA PERSONA
+             ============================================ -->
+        <div id="guest-study-screen" class="screen">
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-title" onclick="showScreen('menu-screen')">
+                        <span class="header-icon">✨</span>
+                        <h1>Estudio para otra persona</h1>
+                    </div>
+                    <nav>
+                        <button class="nav-btn" onclick="showScreen('menu-screen')">Atrás</button>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="card">
+                    <h2 class="card-title">👤 Datos de la persona a estudiar</h2>
+                    <p class="card-subtitle">Tu perfil principal permanecerá guardado y no será reemplazado.</p>
+                    <form id="guest-study-form">
+                        <div class="form-group">
+                            <label for="guest-name">Nombre Completo</label>
+                            <input type="text" id="guest-name" placeholder="Nombre de la persona" required>
+                        </div>
+                        <div class="two-col">
+                            <div class="form-group">
+                                <label>Fecha de Nacimiento</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                                    <input type="number" id="guest-day" min="1" max="31" placeholder="Día" required>
+                                    <select id="guest-month" required>
+                                        <option value="">Mes</option>
+                                        <option value="1">Enero</option><option value="2">Febrero</option>
+                                        <option value="3">Marzo</option><option value="4">Abril</option>
+                                        <option value="5">Mayo</option><option value="6">Junio</option>
+                                        <option value="7">Julio</option><option value="8">Agosto</option>
+                                        <option value="9">Septiembre</option><option value="10">Octubre</option>
+                                        <option value="11">Noviembre</option><option value="12">Diciembre</option>
+                                    </select>
+                                    <input type="number" id="guest-year" min="1900" max="2026" placeholder="Año" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="guest-time">Hora de Nacimiento (opcional)</label>
+                                <input type="time" id="guest-time">
+                            </div>
+                        </div>
+                        <div class="two-col">
+                            <div class="form-group">
+                                <label for="guest-city">Ciudad de Nacimiento</label>
+                                <input type="text" id="guest-city" placeholder="Ciudad">
+                            </div>
+                            <div class="form-group">
+                                <label for="guest-country">País de Nacimiento</label>
+                                <input type="text" id="guest-country" placeholder="País">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="guest-question">Pregunta o intención (opcional)</label>
+                            <textarea id="guest-question" placeholder="Motivo de la lectura..." rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-gold btn-block">Generar estudios de esta persona</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1801,7 +1880,10 @@
                 6: 'Cuidador, responsable, amoroso. Tu fuerza está en servir, amar y crear armonía.',
                 7: 'Investigador, espiritual, introvertido. Tu poder está en la sabiduría, análisis e introspección.',
                 8: 'Emprendedor, poderoso, ambicioso. Tu fuerza está en la abundancia, autoridad y logro.',
-                9: 'Compasivo, humanitario, completo. Tu poder está en servir a la humanidad y la transformación.'
+                9: 'Compasivo, humanitario, completo. Tu poder está en servir a la humanidad y la transformación.',
+                11: 'Número maestro intuitivo e inspirador. Tu camino es iluminar, comunicar y transformar sensibilidad en guía.',
+                22: 'Número maestro constructor. Tu camino es convertir grandes visiones en proyectos sólidos al servicio de otros.',
+                33: 'Número maestro de servicio compasivo. Tu camino es enseñar, sanar y acompañar desde el amor consciente.'
             }
         };
 
@@ -1811,11 +1893,55 @@
 
         function saveProfile(data) {
             localStorage.setItem('astroGuia_profile', JSON.stringify(data));
+            localStorage.removeItem('astroGuia_study_subject');
         }
 
         function getProfile() {
             const data = localStorage.getItem('astroGuia_profile');
             return data ? JSON.parse(data) : null;
+        }
+
+        function getStudyProfile() {
+            const subject = localStorage.getItem('astroGuia_study_subject');
+            return subject ? JSON.parse(subject) : getProfile();
+        }
+
+        function isGuestStudyActive() {
+            return Boolean(localStorage.getItem('astroGuia_study_subject'));
+        }
+
+        function clearStudySubject() {
+            localStorage.removeItem('astroGuia_study_subject');
+            generateAllCharts(false);
+            showScreen('menu-screen');
+        }
+
+        function reduceNumber(value, keepMasterNumbers = false) {
+            let total = String(value)
+                .replace(/\D/g, '')
+                .split('')
+                .reduce((sum, digit) => sum + Number(digit), 0);
+
+            while (total > 9 && !(keepMasterNumbers && [11, 22, 33].includes(total))) {
+                total = String(total)
+                    .split('')
+                    .reduce((sum, digit) => sum + Number(digit), 0);
+            }
+            return total;
+        }
+
+        function calculateNumerology(profile) {
+            const [year, month, day] = profile.fechaNacimiento.split('-').map(Number);
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth() + 1;
+            const universalYear = reduceNumber(currentYear);
+            const lifeNumber = reduceNumber(`${year}${month}${day}`, true);
+            const personalYear = reduceNumber(day + month + universalYear);
+            const personalMonth = reduceNumber(personalYear + currentMonth);
+            const personalDay = reduceNumber(personalMonth + today.getDate());
+
+            return { lifeNumber, personalYear, personalMonth, personalDay };
         }
 
         function saveReading(type, content) {
@@ -1855,6 +1981,12 @@
             if (screenId === 'menu-screen') {
                 updateMenuScreen();
             }
+            if (screenId === 'annual-study-screen') {
+                generateAnnualStudy(false);
+            }
+            if (screenId === 'numerology-screen') {
+                generateNumerology(false);
+            }
         }
 
         // ============================================
@@ -1892,25 +2024,51 @@
             showScreen('menu-screen');
         });
 
+        document.getElementById('guest-study-form')?.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const day = document.getElementById('guest-day').value;
+            const month = document.getElementById('guest-month').value;
+            const year = document.getElementById('guest-year').value;
+            if (!day || !month || !year) {
+                alert('Por favor completa día, mes y año');
+                return;
+            }
+
+            const subject = {
+                nombre: document.getElementById('guest-name').value,
+                fechaNacimiento: `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
+                horaNacimiento: document.getElementById('guest-time').value || '12:00',
+                ciudadNacimiento: document.getElementById('guest-city').value,
+                paisNacimiento: document.getElementById('guest-country').value,
+                pregunta: document.getElementById('guest-question').value,
+                isGuest: true
+            };
+
+            localStorage.setItem('astroGuia_study_subject', JSON.stringify(subject));
+            generateAllCharts(true);
+            showScreen('menu-screen');
+        });
+
         // ============================================
         // GENERACIÓN DE CARTA ASTRAL
         // ============================================
 
-        function generateAllCharts() {
-            const profile = getProfile();
+        function generateAllCharts(recordReading = true) {
+            const profile = getStudyProfile();
             if (!profile) {
                 showScreen('onboarding-screen');
                 return;
             }
 
-            generateNatalChart();
-            generateAnnualStudy();
-            generateNumerology();
+            generateNatalChart(recordReading);
+            generateAnnualStudy(recordReading);
+            generateNumerology(recordReading);
             updateMenuScreen();
         }
 
-        function generateNatalChart() {
-            const profile = getProfile();
+        function generateNatalChart(recordReading = true) {
+            const profile = getStudyProfile();
             
             // Extraer día, mes, año de la cadena de fecha (YYYY-MM-DD)
             const parts = profile.fechaNacimiento.split('-');
@@ -2000,7 +2158,9 @@
             // Propósito
             generatePurpose();
 
-            saveReading('Carta Astral', html);
+            if (recordReading) {
+                saveReading(`Carta Astral - ${profile.nombre}`, html);
+            }
         }
 
         function generateElements(zodiacIndex) {
@@ -2061,7 +2221,7 @@
         }
 
         function generateStrengths() {
-            const profile = getProfile();
+            const profile = getStudyProfile();
             
             // Extraer día, mes, año de la cadena de fecha (YYYY-MM-DD)
             const parts = profile.fechaNacimiento.split('-');
@@ -2145,7 +2305,7 @@
         }
 
         function generatePurpose() {
-            const profile = getProfile();
+            const profile = getStudyProfile();
             
             // Extraer día, mes, año de la cadena de fecha (YYYY-MM-DD)
             const parts = profile.fechaNacimiento.split('-');
@@ -2193,16 +2353,30 @@
         // GENERACIÓN DE ESTUDIO ANUAL
         // ============================================
 
-        function generateAnnualStudy() {
+        function generateAnnualStudy(recordReading = true) {
+            const profile = getStudyProfile();
             const currentYear = new Date().getFullYear();
+            const { personalYear } = calculateNumerology(profile);
             document.getElementById('annual-year').textContent = currentYear;
 
+            const yearThemes = {
+                1: { theme: 'inicios y autonomía', action: 'dar el primer paso en aquello que deseas iniciar', love: 'expresar con claridad qué relación deseas construir', work: 'iniciar proyectos y asumir liderazgo' },
+                2: { theme: 'cooperación y sensibilidad', action: 'escuchar, negociar y permitir que los procesos maduren', love: 'cuidar los vínculos con paciencia y presencia', work: 'crear alianzas confiables' },
+                3: { theme: 'expresión y creatividad', action: 'comunicar tus ideas y recuperar el disfrute', love: 'abrirte a conversaciones ligeras y honestas', work: 'mostrar tu talento y ampliar tu red' },
+                4: { theme: 'orden y construcción', action: 'organizar rutinas y sostener compromisos', love: 'fortalecer acuerdos y seguridad emocional', work: 'consolidar bases económicas y profesionales' },
+                5: { theme: 'cambio y libertad', action: 'adaptarte sin perder tu centro', love: 'renovar dinámicas y respetar espacios', work: 'explorar oportunidades con criterio' },
+                6: { theme: 'amor y responsabilidad', action: 'armonizar hogar, afectos y autocuidado', love: 'profundizar el compromiso desde el equilibrio', work: 'servir sin cargar con todo' },
+                7: { theme: 'introspección y sabiduría', action: 'estudiar, sanar y decidir con calma', love: 'honrar el silencio y la profundidad emocional', work: 'perfeccionar antes de expandirte' },
+                8: { theme: 'logro y administración', action: 'ordenar tus recursos y ejercer tu poder con ética', love: 'equilibrar ambición y cercanía', work: 'negociar, liderar y materializar resultados' },
+                9: { theme: 'cierres y compasión', action: 'completar pendientes y liberar lo que terminó', love: 'perdonar y cerrar ciclos con dignidad', work: 'finalizar proyectos antes de comenzar una nueva etapa' }
+            };
+            const yearTheme = yearThemes[personalYear];
             const annualReadings = {
-                general: `Este año es una invitación a crecer y expandir. Los planetas señalan un año de transformación, donde lo que parecía estancado comienza a moverse. Es tiempo de claridad sobre tus objetivos verdaderos.`,
-                love: `En el ámbito amoroso, hay renovación en el aire. Si estás en pareja, es momento de profundizar conexión. Si buscas amor, el universo te prepara encuentros significativos. Mantén tu corazón abierto pero discernidor.`,
-                money: `Financieramente, hay potencial de crecimiento si actúas con estrategia. No es año de especular, sino de consolidar bases sólidas. Inversiones en educación y desarrollo personal traerán retorno significativo.`,
-                health: `Tu bienestar emocional será prioridad este año. Los viajes astrales apuntan a la necesidad de sanar patrones antiguos. Meditación, movimiento consciente y descanso serán medicinas potentes.`,
-                growth: `Espiritualmente, eres invitado a profundizar. Este es año de introversión reflexiva y autoconocimiento. Confía en tu intuición y sigue lo que resuena con tu verdad.`,
+                general: `${profile.nombre}, ${currentYear} corresponde a tu Año Personal ${personalYear}, un ciclo de ${yearTheme.theme}. La invitación central es ${yearTheme.action}.`,
+                love: `En amor y relaciones, este ciclo te invita a ${yearTheme.love}. Procura elegir desde la honestidad y no desde la prisa.`,
+                money: `En trabajo y recursos, el Año Personal ${personalYear} favorece ${yearTheme.work}. Revisa decisiones importantes con calma y metas concretas.`,
+                health: `Tu bienestar acompaña este ciclo cuando reservas energía para descansar, ordenar emociones y atender las señales de tu cuerpo.`,
+                growth: `Tu aprendizaje de este año consiste en vivir la energía de ${yearTheme.theme} con conciencia, convirtiéndola en acciones pequeñas y sostenibles.`,
                 months: [
                     { month: 'Enero', energy: 'Nuevos comienzos', advice: 'Siembra intenciones claras' },
                     { month: 'Febrero', energy: 'Reflexión y amor', advice: 'Cultiva relaciones profundas' },
@@ -2217,8 +2391,8 @@
                     { month: 'Noviembre', energy: 'Abundancia', advice: 'Recibe con gratitud' },
                     { month: 'Diciembre', energy: 'Cierre y celebración', advice: 'Honra tu viaje' }
                 ],
-                warning: 'Los retrogrados pueden traer reflexión; úsalos para revisar y ajustar, no para dudar.',
-                final: '✨ Recuerda: Este año es tuyo para crear. Los astros proponen, pero tu acción dispone. Atrévete a soñar en grande.'
+                warning: 'Esta lectura es una herramienta simbólica de reflexión; toma tus decisiones personales, médicas o financieras con información adecuada.',
+                final: `✨ ${profile.nombre}, tu Año Personal ${personalYear} no determina tu destino: te ofrece un enfoque para caminar ${currentYear} con mayor conciencia.`
             };
 
             let html = `
@@ -2290,7 +2464,9 @@
             `;
 
             document.getElementById('annual-study-content').innerHTML = html;
-            saveReading('Estudio Anual', annualReadings.general);
+            if (recordReading) {
+                saveReading(`Estudio Anual - ${profile.nombre}`, annualReadings.general);
+            }
         }
 
         // ============================================
@@ -2488,32 +2664,15 @@
         // NUMEROLOGÍA
         // ============================================
 
-        function generateNumerology() {
-            const profile = getProfile();
-            
-            // Extraer día, mes, año de la cadena de fecha (YYYY-MM-DD)
-            const parts = profile.fechaNacimiento.split('-');
-            const year = parseInt(parts[0]);
-            const month = parseInt(parts[1]);
-            const day = parseInt(parts[2]);
-
-            // Calcular número de vida
-            function reduceToSingle(num) {
-                while (num > 9) {
-                    num = Math.floor(num / 10) + (num % 10);
-                }
-                return num;
-            }
-
-            const lifeNumber = reduceToSingle(day + month + year);
-            const yearNumber = reduceToSingle(new Date().getFullYear() + month + day);
-            const monthNumber = reduceToSingle(new Date().getMonth() + 1 + lifeNumber);
+        function generateNumerology(recordReading = true) {
+            const profile = getStudyProfile();
+            const { lifeNumber, personalYear: yearNumber, personalMonth: monthNumber } = calculateNumerology(profile);
 
             let html = `
                 <div class="card">
                     <div class="stat-box">
                         <div class="stat-number">${lifeNumber}</div>
-                        <div class="stat-label">Tu Número de Vida</div>
+                        <div class="stat-label">Número de Vida de ${profile.nombre}</div>
                         <div class="stat-meaning">
                             ${INTERPRETATIONS.numerology[lifeNumber] || 'Tu número te define profundamente.'}
                         </div>
@@ -2525,29 +2684,29 @@
                     <div class="planet-box">
                         <div class="planet-name">🔢 Número de Vida: ${lifeNumber}</div>
                         <div class="planet-interpretation">
-                            Tu número de vida es ${lifeNumber}. Este número representa tu esencia, tu propósito central en esta encarnación.
-                            Es la vibración que resuena en tu ser. Trabajar conscientemente con este número te conecta con tu verdadera naturaleza.
+                            El número de vida de ${profile.nombre} es ${lifeNumber}. Este número representa su esencia y su propósito central.
+                            Trabajar conscientemente con este número puede ayudarle a reflexionar sobre su propia naturaleza.
                         </div>
                     </div>
 
                     <div class="planet-box">
                         <div class="planet-name">📅 Año Personal: ${yearNumber}</div>
                         <div class="planet-interpretation">
-                            Tu año personal es ${yearNumber}. Este es el tipo de energía que predominará este año para ti.
-                            Los ciclos numéricos duran 9 años, así que estás en el año ${yearNumber} de tu ciclo actual.
+                            Su año personal es ${yearNumber}. Esta es la energía predominante para el año actual.
+                            Los ciclos numerológicos recorren nueve etapas y esta lectura ubica a ${profile.nombre} en la etapa ${yearNumber}.
                         </div>
                     </div>
 
                     <div class="planet-box">
                         <div class="planet-name">🌙 Energía del Mes Personal: ${monthNumber}</div>
                         <div class="planet-interpretation">
-                            Tu energía personal del mes actual es ${monthNumber}. Usa esta vibración para alinearte con las acciones más poderosas ahora.
+                            Su energía personal del mes actual es ${monthNumber}, calculada a partir de su año personal y el mes calendario actual.
                         </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3 class="card-title">🎯 Talentos Según tu Numerología</h3>
+                    <h3 class="card-title">🎯 Talentos Según la Numerología</h3>
                     <ul style="list-style: none; margin: 15px 0;">
                         <li style="padding: 8px 0; border-bottom: 1px solid rgba(124, 58, 237, 0.1);"><span style="color: var(--accent-gold);">✓</span> Talento innato por ${lifeNumber % 2 === 0 ? 'la colaboración y diplomacia' : 'la independencia y liderazgo'}</li>
                         <li style="padding: 8px 0; border-bottom: 1px solid rgba(124, 58, 237, 0.1);"><span style="color: var(--accent-gold);">✓</span> Capacidad para ${lifeNumber > 5 ? 'adaptarte y comunicar' : 'construir y persistir'}</li>
@@ -2564,16 +2723,17 @@
                 </div>
 
                 <div class="card" style="background: rgba(251, 191, 36, 0.1); border-left: 4px solid var(--accent-gold);">
-                    <h3 class="card-title">✨ Consejo de Numerología</h3>
+                    <h3 class="card-title">✨ Consejo de Numerología para ${profile.nombre}</h3>
                     <p style="color: var(--text-light); line-height: 1.8;">
-                        Tu número ${lifeNumber} es tu firma cósmica. Respeta su vibración en tus decisiones. 
-                        Medita en este número, visualízalo, invócalo cuando necesites conectar con tu poder.
+                        El número ${lifeNumber} puede utilizarse como una guía simbólica para reflexionar sobre decisiones y aprendizajes.
                     </p>
                 </div>
             `;
 
             document.getElementById('numerology-content').innerHTML = html;
-            saveReading('Numerología', `Número de Vida: ${lifeNumber}`);
+            if (recordReading) {
+                saveReading(`Numerología - ${profile.nombre}`, `Número de Vida: ${lifeNumber}; Año Personal: ${yearNumber}; Mes Personal: ${monthNumber}`);
+            }
         }
 
         // ============================================
@@ -2755,8 +2915,8 @@
             const reflection = reflections[Math.floor(Math.random() * reflections.length)];
             document.getElementById('daily-reflection').textContent = reflection;
 
-            // Número del día
-            const numberSum = Math.floor(Math.random() * 9) + 1;
+            // Número personal del día, estable para la fecha y el perfil principal.
+            const { personalDay: numberSum } = calculateNumerology(profile);
             const numberMeanings = {
                 1: 'Liderazgo y nuevos comienzos',
                 2: 'Cooperación y equilibrio',
@@ -2803,6 +2963,12 @@
             }
 
             document.getElementById('user-name-header').textContent = profile.nombre;
+            const studyProfile = getStudyProfile();
+            const guestActive = isGuestStudyActive();
+            document.getElementById('study-subject-label').textContent = guestActive
+                ? `Lectura activa: ${studyProfile.nombre}. Tu perfil principal sigue siendo ${profile.nombre}.`
+                : 'Los estudios actuales utilizan tu perfil. Puedes realizar una lectura para otra persona sin cambiar tus datos.';
+            document.getElementById('return-own-profile-btn').style.display = guestActive ? 'inline-block' : 'none';
 
             updateDailyReflection();
             generateAstrocalendar();
@@ -2831,7 +2997,7 @@
         // ============================================
 
         function downloadChart(type) {
-            const profile = getProfile();
+            const profile = getStudyProfile();
             let content = `AstroGuía Personal - ${type.charAt(0).toUpperCase() + type.slice(1)}\n`;
             content += `${profile.nombre}\n`;
             content += `Fecha: ${new Date().toLocaleDateString()}\n\n`;
@@ -2848,8 +3014,8 @@
         }
 
         function shareResult(type) {
-            const profile = getProfile();
-            const text = `✨ Acabo de explorar mi ${type} en AstroGuía Personal. Descubre tu brújula cósmica 🌙`;
+            const profile = getStudyProfile();
+            const text = `✨ Lectura de ${type} para ${profile.nombre} en AstroGuía Personal. 🌙`;
 
             if (navigator.share) {
                 navigator.share({
@@ -2865,10 +3031,11 @@
 
         function exportData() {
             const profile = getProfile();
+            const studySubject = isGuestStudyActive() ? getStudyProfile() : null;
             const readings = JSON.parse(localStorage.getItem('astroGuia_readings') || '[]');
             const moods = JSON.parse(localStorage.getItem('astroGuia_moods') || '[]');
 
-            const data = { profile, readings, moods };
+            const data = { profile, activeStudySubject: studySubject, readings, moods };
             const json = JSON.stringify(data, null, 2);
             const blob = new Blob([json], { type: 'application/json' });
             const url = window.URL.createObjectURL(blob);
@@ -2892,18 +3059,11 @@
         document.addEventListener('DOMContentLoaded', function () {
             const profile = getProfile();
             if (profile) {
-                updateMenuScreen();
+                generateAllCharts(false);
                 showScreen('menu-screen');
             } else {
                 showScreen('welcome-screen');
             }
-        });
-
-        // Prevenir que los formularios se envíen sin intención
-        document.getElementById('compatibility-form')?.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const event = new Event('submit');
-            this.dispatchEvent(event);
         });
 
         // ============================================
@@ -2930,7 +3090,7 @@
             const question = document.getElementById('ai-question').value;
             if (!question.trim()) return;
 
-            const profile = getProfile();
+            const profile = getStudyProfile();
 
             // Mostrar pregunta del usuario
             const messagesDiv = document.getElementById('chat-messages');
@@ -2960,7 +3120,7 @@
                 const sunSign = ZODIAC_SIGNS[zodiacIndex % 12];
 
                 console.log('📤 Enviando a GROQ:', {
-                    modelo: 'llama-3.1-70b-versatile',
+                    modelo: 'llama-3.3-70b-versatile',
                     usuario: profile.nombre
                 });
 
