@@ -898,6 +898,110 @@
 
         .share-btn:hover {
             background: var(--accent-purple);
+        }
+
+        /* ============================================
+           MODAL DE RESULTADOS
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--gradient-cosmic);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            margin-top: 60px;
+            box-shadow: var(--shadow-glow);
+            animation: slideInRight 0.3s ease;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 28px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-pink);
+            transform: scale(1.2);
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 10px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.4);
+            border-radius: 10px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 20px;
+                margin-top: 40px;
+                max-width: 100%;
+            }
+
+            .modal-title {
+                font-size: 20px;
+            }
+        }
             border-color: var(--accent-purple);
         }
 
@@ -1122,7 +1226,7 @@
                     </div>
 
                     <div class="two-col">
-                        <div class="card" style="cursor: pointer;" onclick="showScreen('natal-chart-screen')">
+                        <div class="card" style="cursor: pointer;" onclick="showNatalChartModal()">
                             <div class="card-title">
                                 <span class="card-title-icon">🌟</span>
                                 Carta Astral Natal
@@ -1133,7 +1237,7 @@
                             <button class="btn btn-small">Ver Carta →</button>
                         </div>
 
-                        <div class="card" style="cursor: pointer;" onclick="showScreen('annual-study-screen')">
+                        <div class="card" style="cursor: pointer;" onclick="showAnnualStudyModal()">
                             <div class="card-title">
                                 <span class="card-title-icon">📅</span>
                                 Estudio Anual
@@ -1146,7 +1250,7 @@
                     </div>
 
                     <div class="two-col">
-                        <div class="card" style="cursor: pointer;" onclick="showScreen('monthly-study-screen')">
+                        <div class="card" style="cursor: pointer;" onclick="showMonthlyStudyModal()">
                             <div class="card-title">
                                 <span class="card-title-icon">🌙</span>
                                 Estudio Mensual
@@ -1157,7 +1261,7 @@
                             <button class="btn btn-small">Leer Mes →</button>
                         </div>
 
-                        <div class="card" style="cursor: pointer;" onclick="showScreen('tarot-screen')">
+                        <div class="card" style="cursor: pointer;" onclick="showTarotModal()">
                             <div class="card-title">
                                 <span class="card-title-icon">🔮</span>
                                 Tarot Interactivo
@@ -1170,7 +1274,7 @@
                     </div>
 
                     <div class="two-col">
-                        <div class="card" style="cursor: pointer;" onclick="showScreen('numerology-screen')">
+                        <div class="card" style="cursor: pointer;" onclick="showNumerologyModal()">
                             <div class="card-title">
                                 <span class="card-title-icon">🔢</span>
                                 Numerología
@@ -1181,7 +1285,7 @@
                             <button class="btn btn-small">Calcular →</button>
                         </div>
 
-                        <div class="card" style="cursor: pointer;" onclick="showScreen('compatibility-screen')">
+                        <div class="card" style="cursor: pointer;" onclick="showCompatibilityModal()">
                             <div class="card-title">
                                 <span class="card-title-icon">💫</span>
                                 Compatibilidad
@@ -1193,7 +1297,7 @@
                         </div>
                     </div>
 
-                    <div class="card" style="cursor: pointer;" onclick="showScreen('calendar-screen')">
+                    <div class="card" style="cursor: pointer;" onclick="showCalendarModal()">
                         <div class="card-title">
                             <span class="card-title-icon">📆</span>
                             Calendario Astrológico
@@ -1745,6 +1849,20 @@
         </div>
     </div>
 
+    <!-- MODAL DE RESULTADOS (Carta Astral, Numerología, etc.) -->
+    <div id="results-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeResultsModal()">✕</button>
+            <div class="modal-title" id="results-modal-title">
+                <span id="results-modal-icon">✨</span>
+                <span id="results-modal-name">Resultado</span>
+            </div>
+            <div class="modal-body" id="results-modal-body">
+                <!-- El contenido se carga dinámicamente aquí -->
+            </div>
+        </div>
+    </div>
+
     <!-- ============================================
          SCRIPT PRINCIPAL
          ============================================ -->
@@ -1987,6 +2105,494 @@
             if (screenId === 'numerology-screen') {
                 generateNumerology(false);
             }
+        }
+
+        // ============================================
+        // FUNCIONES PARA MODAL DE RESULTADOS
+        // ============================================
+        function showResultsModal(title, icon, content) {
+            document.getElementById('results-modal-icon').textContent = icon;
+            document.getElementById('results-modal-name').textContent = title;
+            document.getElementById('results-modal-body').innerHTML = content;
+            document.getElementById('results-modal').classList.add('active');
+        }
+
+        function closeResultsModal() {
+            document.getElementById('results-modal').classList.remove('active');
+        }
+
+        // Cerrar modal al clickear fuera
+        document.getElementById('results-modal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeResultsModal();
+        });
+
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR CARTA ASTRAL EN MODAL
+        // ============================================
+        function showNatalChartModal() {
+            const profile = getStudyProfile();
+            
+            // Extraer día, mes, año de la cadena de fecha (YYYY-MM-DD)
+            const parts = profile.fechaNacimiento.split('-');
+            const year = parseInt(parts[0]);
+            const month = parseInt(parts[1]);
+            const day = parseInt(parts[2]);
+            
+            // Calcular índice de zodiaco basado en mes y día
+            const zodiacIndex = Math.floor((month - 1 + (day / 31)) * 12 / 12);
+
+            let html = '<div style="margin-bottom: 20px; padding: 15px; background: rgba(124, 58, 237, 0.1); border-left: 4px solid var(--accent-gold); border-radius: 6px;">';
+            html += `<p style="color: var(--text-muted); margin: 0; font-size: 13px;">Tu mapa cósmico personal es único como tu huella digital. Estos son los principales aspectos de tu cosmograma natal.</p>`;
+            html += '</div>';
+
+            // Sol
+            const sunSign = ZODIAC_SIGNS[zodiacIndex % 12];
+            html += `
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(251, 191, 36, 0.1); border-left: 4px solid var(--accent-gold); border-radius: 6px;">
+                    <h3 style="color: var(--accent-gold); margin: 0 0 10px 0; font-size: 18px;">☀️ Tu Sol en ${sunSign}</h3>
+                    <p style="color: var(--text-muted); margin: 0 0 8px 0; font-size: 13px;">Tu Esencia, tu identidad central</p>
+                    <p style="color: var(--text-light); margin: 0; line-height: 1.6;">
+                        ${INTERPRETATIONS.natal.sol[sunSign.toLowerCase()] || 'Tu Sol brilla con poder único.'}
+                    </p>
+                </div>
+            `;
+
+            // Luna
+            const moonIndex = (zodiacIndex + 5) % 12;
+            const moonSign = ZODIAC_SIGNS[moonIndex];
+            html += `
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+                    <h3 style="color: var(--accent-blue); margin: 0 0 10px 0; font-size: 18px;">🌙 Tu Luna en ${moonSign}</h3>
+                    <p style="color: var(--text-muted); margin: 0 0 8px 0; font-size: 13px;">Tu vida emocional interior</p>
+                    <p style="color: var(--text-light); margin: 0; line-height: 1.6;">
+                        Tu Luna busca seguridad y expresión emocional. En ${moonSign}, tu mundo interior es profundo y misterioso.
+                        Conecta con tus emociones para encontrar tu verdadero norte.
+                    </p>
+                </div>
+            `;
+
+            // Ascendente
+            const ascendantIndex = (zodiacIndex + 3) % 12;
+            const ascendant = ZODIAC_SIGNS[ascendantIndex];
+            html += `
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(236, 72, 153, 0.1); border-left: 4px solid var(--accent-pink); border-radius: 6px;">
+                    <h3 style="color: var(--accent-pink); margin: 0 0 10px 0; font-size: 18px;">🌅 Tu Ascendente en ${ascendant}</h3>
+                    <p style="color: var(--text-muted); margin: 0 0 8px 0; font-size: 13px;">Cómo el mundo te ve</p>
+                    <p style="color: var(--text-light); margin: 0; line-height: 1.6;">
+                        Tu Ascendente es la máscara que usas en el mundo. En ${ascendant}, proyectas ${ascendant.toLowerCase() === 'aries' ? 'coraje y energía' : 'elegancia y misterio'}.
+                        Esta es tu primera impresión.
+                    </p>
+                </div>
+            `;
+
+            // Planetas personales
+            const planetSignsData = [
+                { name: 'Mercurio', emoji: '💬', house: 2, meaning: 'Tu comunicación y pensamiento' },
+                { name: 'Venus', emoji: '💕', house: 4, meaning: 'Tu amor y valores' },
+                { name: 'Marte', emoji: '🔥', house: 6, meaning: 'Tu pasión y acción' },
+                { name: 'Júpiter', emoji: '🎯', house: 8, meaning: 'Tu expansión y fortuna' },
+                { name: 'Saturno', emoji: '⏳', house: 10, meaning: 'Tu estructura y lecciones de vida' }
+            ];
+
+            planetSignsData.forEach(p => {
+                const signIndex = (zodiacIndex + p.house) % 12;
+                const sign = ZODIAC_SIGNS[signIndex];
+                const planetKey = p.name.toLowerCase();
+                const interpretation = INTERPRETATIONS.natal[planetKey] && INTERPRETATIONS.natal[planetKey][sign.toLowerCase()] 
+                    ? INTERPRETATIONS.natal[planetKey][sign.toLowerCase()] 
+                    : `Tu ${p.name} en ${sign} te trae lecciones y regalos únicos.`;
+                
+                html += `
+                    <div style="margin-bottom: 15px; padding: 12px; background: rgba(124, 58, 237, 0.08); border-left: 3px solid var(--accent-purple); border-radius: 6px;">
+                        <p style="color: var(--accent-gold); margin: 0 0 6px 0; font-weight: bold;">${p.emoji} ${p.name} en ${sign}</p>
+                        <p style="color: var(--text-muted); margin: 0 0 6px 0; font-size: 12px;">${p.meaning}</p>
+                        <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.5;">
+                            ${interpretation}
+                        </p>
+                    </div>
+                `;
+            });
+
+            showResultsModal('Tu Carta Astral', '✨', html);
+            saveReading(`Carta Astral - ${profile.nombre}`, html);
+        }
+
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR NUMEROLOGÍA EN MODAL
+        // ============================================
+        function showNumerologyModal() {
+            const profile = getStudyProfile();
+            const { lifeNumber, personalYear: yearNumber, personalMonth: monthNumber } = calculateNumerology(profile);
+
+            let html = `
+                <div style="margin-bottom: 20px; text-align: center; padding: 20px; background: rgba(251, 191, 36, 0.15); border-radius: 8px;">
+                    <div style="font-size: 48px; font-weight: bold; color: var(--accent-gold); margin-bottom: 10px;">${lifeNumber}</div>
+                    <div style="color: var(--text-light); font-size: 14px;">Tu Número de Vida</div>
+                    <div style="color: var(--text-muted); font-size: 12px; margin-top: 8px; line-height: 1.6;">
+                        ${INTERPRETATIONS.numerology[lifeNumber] || 'Tu número te define profundamente.'}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(124, 58, 237, 0.08); border-left: 3px solid var(--accent-purple); border-radius: 6px;">
+                    <h4 style="color: var(--accent-gold); margin: 0 0 8px 0;">🔢 Número de Vida: ${lifeNumber}</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        El número de vida de ${profile.nombre} es ${lifeNumber}. Este número representa su esencia y su propósito central.
+                        Trabajar conscientemente con este número puede ayudarle a reflexionar sobre su propia naturaleza.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid var(--accent-blue); border-radius: 6px;">
+                    <h4 style="color: var(--accent-blue); margin: 0 0 8px 0;">📅 Año Personal: ${yearNumber}</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        Su año personal es ${yearNumber}. Esta es la energía predominante para el año actual.
+                        Los ciclos numerológicos recorren nueve etapas y esta lectura ubica a ${profile.nombre} en la etapa ${yearNumber}.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(236, 72, 153, 0.08); border-left: 3px solid var(--accent-pink); border-radius: 6px;">
+                    <h4 style="color: var(--accent-pink); margin: 0 0 8px 0;">🌙 Energía del Mes Personal: ${monthNumber}</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        Su energía personal del mes actual es ${monthNumber}, calculada a partir de su año personal y el mes calendario actual.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(251, 191, 36, 0.08); border-left: 3px solid var(--accent-gold); border-radius: 6px;">
+                    <h4 style="color: var(--accent-gold); margin: 0 0 12px 0;">🎯 Talentos Según la Numerología</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="padding: 8px 0; color: var(--text-light); font-size: 13px;"><span style="color: var(--accent-gold); margin-right: 8px;">✓</span>Talento innato por ${lifeNumber % 2 === 0 ? 'la colaboración y diplomacia' : 'la independencia y liderazgo'}</li>
+                        <li style="padding: 8px 0; color: var(--text-light); font-size: 13px;"><span style="color: var(--accent-gold); margin-right: 8px;">✓</span>Capacidad para ${lifeNumber > 5 ? 'adaptarte y comunicar' : 'construir y persistir'}</li>
+                        <li style="padding: 8px 0; color: var(--text-light); font-size: 13px;"><span style="color: var(--accent-gold); margin-right: 8px;">✓</span>Tu número te otorga el don de ${lifeNumber % 3 === 0 ? 'la expresión creativa' : lifeNumber % 3 === 1 ? 'la innovación' : 'la sabiduría'}</li>
+                    </ul>
+                </div>
+
+                <div style="padding: 15px; background: rgba(236, 72, 153, 0.08); border-left: 3px solid var(--accent-pink); border-radius: 6px;">
+                    <h4 style="color: var(--accent-pink); margin: 0 0 12px 0;">💪 Retos de Crecimiento</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="padding: 8px 0; color: var(--text-light); font-size: 13px;"><span style="color: var(--accent-pink); margin-right: 8px;">⚡</span>Aprende a balancear ${lifeNumber % 2 === 0 ? 'tu necesidad de armonía con tu propia voluntad' : 'tu independencia con la colaboración'}</li>
+                        <li style="padding: 8px 0; color: var(--text-light); font-size: 13px;"><span style="color: var(--accent-pink); margin-right: 8px;">⚡</span>Transforma el ${lifeNumber > 5 ? 'cambio constante' : 'la rigidez'} en tu mayor fortaleza</li>
+                    </ul>
+                </div>
+            `;
+
+            showResultsModal('Tu Numerología', '🔢', html);
+            saveReading(`Numerología - ${profile.nombre}`, `Número de Vida: ${lifeNumber}; Año Personal: ${yearNumber}; Mes Personal: ${monthNumber}`);
+        }
+
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR ESTUDIO ANUAL EN MODAL
+        // ============================================
+        function showAnnualStudyModal() {
+            const profile = getStudyProfile();
+            const currentYear = new Date().getFullYear();
+            const birthYear = parseInt(profile.fechaNacimiento.split('-')[0]);
+            const age = currentYear - birthYear;
+            
+            const yearEnergy = currentYear % 9 || 9;
+            const ageEnergy = age % 9 || 9;
+            
+            let html = `
+                <div style="margin-bottom: 20px; text-align: center; padding: 20px; background: rgba(251, 191, 36, 0.15); border-radius: 8px;">
+                    <div style="font-size: 32px; color: var(--accent-gold); margin-bottom: 5px;">📅 ${currentYear}</div>
+                    <div style="color: var(--text-light); font-size: 13px;">Energía del Año para ${profile.nombre}</div>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(251, 191, 36, 0.08); border-left: 3px solid var(--accent-gold); border-radius: 6px;">
+                    <h4 style="color: var(--accent-gold); margin: 0 0 8px 0;">✨ Energía del Año ${currentYear}</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        ${currentYear} es un año de ${yearEnergy === 1 ? 'nuevos comienzos y liderazgo' : yearEnergy === 2 ? 'cooperación y paciencia' : yearEnergy === 3 ? 'creatividad y expresión' : yearEnergy === 4 ? 'estructura y fundaciones' : yearEnergy === 5 ? 'cambio y libertad' : yearEnergy === 6 ? 'amor y responsabilidad' : yearEnergy === 7 ? 'reflexión y sabiduría' : yearEnergy === 8 ? 'poder y abundancia' : 'culminación y transformación'} para ti.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid var(--accent-blue); border-radius: 6px;">
+                    <h4 style="color: var(--accent-blue); margin: 0 0 8px 0;">🌟 Oportunidades Principales</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        Este año te invita a ${yearEnergy > 5 ? 'ser flexible y adaptable ante los cambios' : 'construir bases sólidas para tus metas'}. 
+                        Es un excelente momento para ${yearEnergy % 2 === 0 ? 'colaborar y fortalecer relaciones' : 'tomar iniciativas personales'}.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(236, 72, 153, 0.08); border-left: 3px solid var(--accent-pink); border-radius: 6px;">
+                    <h4 style="color: var(--accent-pink); margin: 0 0 8px 0;">💪 Desafíos del Año</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        Presta atención a ${yearEnergy === 1 ? 'no ser demasiado impulsivo' : yearEnergy === 2 ? 'mantener tu independencia' : yearEnergy === 3 ? 'dispersarte en demasiados proyectos' : 'la impaciencia o la inflexibilidad'}. 
+                        Este es tu año para crecer aprendiendo de estos retos.
+                    </p>
+                </div>
+
+                <div style="padding: 15px; background: rgba(124, 58, 237, 0.08); border-left: 3px solid var(--accent-purple); border-radius: 6px;">
+                    <h4 style="color: var(--accent-purple); margin: 0 0 8px 0;">🎯 Consejo Anual</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        ${currentYear} te pide que confíes en tu intuición. Los ciclos anuales son guías para tu evolución personal. 
+                        Aprovecha esta energía de ${yearEnergy} para manifestar lo que deseas.
+                    </p>
+                </div>
+            `;
+
+            showResultsModal(`Estudio Anual ${currentYear}`, '📅', html);
+            saveReading(`Estudio Anual - ${profile.nombre}`, `Año ${currentYear}, Energía: ${yearEnergy}`);
+        }
+
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR ESTUDIO MENSUAL EN MODAL
+        // ============================================
+        function showMonthlyStudyModal() {
+            const profile = getStudyProfile();
+            const now = new Date();
+            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            const monthEnergy = (currentMonth + 1) % 9 || 9;
+            
+            let html = `
+                <div style="margin-bottom: 20px; text-align: center; padding: 20px; background: rgba(59, 130, 246, 0.15); border-radius: 8px;">
+                    <div style="font-size: 28px; color: var(--accent-blue); margin-bottom: 5px;">🌙 ${monthNames[currentMonth]}</div>
+                    <div style="color: var(--text-light); font-size: 13px;">Energía del Mes para ${profile.nombre}</div>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid var(--accent-blue); border-radius: 6px;">
+                    <h4 style="color: var(--accent-blue); margin: 0 0 8px 0;">✨ Energía de ${monthNames[currentMonth]}</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        En ${monthNames[currentMonth]}, tu energía se enfoca en ${monthEnergy === 1 ? 'iniciativas y liderazgo' : monthEnergy === 2 ? 'paciencia y cooperación' : monthEnergy === 3 ? 'expresión creativa' : monthEnergy === 4 ? 'estructura y orden' : monthEnergy === 5 ? 'cambio y aventura' : monthEnergy === 6 ? 'armonía y servicio' : monthEnergy === 7 ? 'introspección y sabiduría' : monthEnergy === 8 ? 'poder y logros' : 'cierre y transformación'}.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(251, 191, 36, 0.08); border-left: 3px solid var(--accent-gold); border-radius: 6px;">
+                    <h4 style="color: var(--accent-gold); margin: 0 0 8px 0;">🎯 Enfoque Recomendado</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        Este mes es ideal para ${monthEnergy % 2 === 0 ? 'fortalecer tus relaciones y colaboraciones' : 'avanzar en tus objetivos personales'}. 
+                        Aprovecha la energía de ${monthNames[currentMonth]} para ${monthEnergy > 5 ? 'reflexionar y planificar' : 'actuar y crear'}.
+                    </p>
+                </div>
+
+                <div style="padding: 15px; background: rgba(236, 72, 153, 0.08); border-left: 3px solid var(--accent-pink); border-radius: 6px;">
+                    <h4 style="color: var(--accent-pink); margin: 0 0 8px 0;">💫 Consejo del Mes</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        Mantén la flexibilidad durante ${monthNames[currentMonth]}. Los ciclos mensuales son más cortos y rápidos. 
+                        Lo que aprendas este mes te preparará para el siguiente.
+                    </p>
+                </div>
+            `;
+
+            showResultsModal(`Estudio Mensual - ${monthNames[currentMonth]}`, '🌙', html);
+            saveReading(`Estudio Mensual - ${profile.nombre}`, `${monthNames[currentMonth]} ${currentYear}, Energía: ${monthEnergy}`);
+        }
+
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR TAROT EN MODAL
+        // ============================================
+        function showTarotModal() {
+            const cardTypes = ['3 cartas', '5 cartas', 'Tirada de Sí/No'];
+            
+            let html = `
+                <div style="margin-bottom: 20px; text-align: center; padding: 15px; background: rgba(124, 58, 237, 0.1); border-radius: 8px;">
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        ¿Cuántas cartas deseas que revele el tarot para ti? Cada tirada te ofrece perspectivas diferentes.
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px;">
+                    <button onclick="tarotReading('3'); closeResultsModal();" style="padding: 15px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
+                        🃏 Tirada de 3 Cartas
+                        <p style="color: var(--text-muted); font-size: 12px; margin: 5px 0 0 0;">Pasado, Presente, Futuro</p>
+                    </button>
+                    <button onclick="tarotReading('5'); closeResultsModal();" style="padding: 15px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
+                        🃏 Tirada de 5 Cartas
+                        <p style="color: var(--text-muted); font-size: 12px; margin: 5px 0 0 0;">Visión más completa</p>
+                    </button>
+                    <button onclick="tarotReading('yes-no'); closeResultsModal();" style="padding: 15px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
+                        🃏 Tirada Sí/No
+                        <p style="color: var(--text-muted); font-size: 12px; margin: 5px 0 0 0;">Respuesta directa</p>
+                    </button>
+                </div>
+
+                <div style="padding: 15px; background: rgba(124, 58, 237, 0.08); border-left: 3px solid var(--accent-purple); border-radius: 6px;">
+                    <p style="color: var(--text-muted); margin: 0; font-size: 12px; line-height: 1.6;">
+                        💜 El tarot es una herramienta de autoconocimiento y reflexión. Las cartas revelan patrones y oportunidades que quizás no habías considerado.
+                    </p>
+                </div>
+            `;
+
+            showResultsModal('Lectura de Tarot', '🃏', html);
+        }
+
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR COMPATIBILIDAD EN MODAL
+        // ============================================
+        function showCompatibilityModal() {
+            let html = `
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(236, 72, 153, 0.1); border-radius: 8px;">
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        Ingresa los datos de otra persona para analizar la compatibilidad astrológica. Necesitaremos su fecha de nacimiento.
+                    </p>
+                </div>
+
+                <form onsubmit="handleCompatibilitySubmit(event)" style="display: flex; flex-direction: column; gap: 12px;">
+                    <input 
+                        type="text" 
+                        id="modal-other-name" 
+                        placeholder="Nombre (ej: María)"
+                        required
+                        style="padding: 12px; background: rgba(10, 14, 39, 0.7); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 6px; color: var(--text-light); font-size: 13px;"
+                    />
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                        <input 
+                            type="number" 
+                            id="modal-other-dia" 
+                            placeholder="Día"
+                            min="1" max="31"
+                            required
+                            style="padding: 10px; background: rgba(10, 14, 39, 0.7); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 6px; color: var(--text-light); font-size: 12px; text-align: center;"
+                        />
+                        <input 
+                            type="number" 
+                            id="modal-other-mes" 
+                            placeholder="Mes"
+                            min="1" max="12"
+                            required
+                            style="padding: 10px; background: rgba(10, 14, 39, 0.7); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 6px; color: var(--text-light); font-size: 12px; text-align: center;"
+                        />
+                        <input 
+                            type="number" 
+                            id="modal-other-ano" 
+                            placeholder="Año"
+                            min="1900" max="2024"
+                            required
+                            style="padding: 10px; background: rgba(10, 14, 39, 0.7); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 6px; color: var(--text-light); font-size: 12px; text-align: center;"
+                        />
+                    </div>
+
+                    <button 
+                        type="submit"
+                        style="padding: 12px; background: var(--accent-gold); border: none; border-radius: 6px; color: var(--primary-dark); font-weight: bold; cursor: pointer; font-size: 14px; transition: all 0.3s ease;"
+                    >
+                        Analizar Compatibilidad 💕
+                    </button>
+                </form>
+            `;
+
+            showResultsModal('Compatibilidad Astrológica', '💕', html);
+        }
+
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR CALENDARIO EN MODAL
+        // ============================================
+        function showCalendarModal() {
+            const now = new Date();
+            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const currentMonth = now.getMonth();
+            
+            const astroEvents = {
+                'Enero': '🎯 Año de Nuevos Inicios - Energía de Fuego',
+                'Febrero': '💜 Mes de Intuición y Misterio - Luna Llena',
+                'Marzo': '🌿 Equinoccio de Primavera - Renacimiento',
+                'Abril': '🌸 Energía de Crecimiento y Fertilidad',
+                'Mayo': '☀️ Fuerza del Sol - Creatividad en su Auge',
+                'Junio': '🌞 Solsticio de Verano - Luz y Claridad',
+                'Julio': '🌙 Mes Lunar - Emociones Profundas',
+                'Agosto': '✨ Leo - Poder Personal y Expresión',
+                'Septiembre': '🍂 Cambio de Estación - Transformación',
+                'Octubre': '🎃 Velo entre Mundos - Intuición Elevada',
+                'Noviembre': '🦂 Escorpio - Profundidad y Regeneración',
+                'Diciembre': '❄️ Solsticio de Invierno - Reflexión y Renacimiento'
+            };
+
+            let html = `
+                <div style="margin-bottom: 20px; text-align: center; padding: 15px; background: rgba(251, 191, 36, 0.15); border-radius: 8px;">
+                    <div style="font-size: 20px; color: var(--accent-gold); margin-bottom: 8px;">📅 Calendario Astrológico 2024-2025</div>
+                    <p style="color: var(--text-muted); margin: 0; font-size: 12px;">Eventos cósmicos relevantes para tu año</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+            `;
+
+            monthNames.forEach((month, index) => {
+                const isCurrentMonth = index === currentMonth;
+                const bgColor = isCurrentMonth ? 'rgba(124, 58, 237, 0.15)' : 'rgba(124, 58, 237, 0.08)';
+                const borderColor = isCurrentMonth ? 'var(--accent-purple)' : 'rgba(124, 58, 237, 0.2)';
+                
+                html += `
+                    <div style="padding: 12px; background: ${bgColor}; border-left: 3px solid ${borderColor}; border-radius: 6px;">
+                        <p style="color: var(--accent-gold); margin: 0 0 5px 0; font-weight: bold; font-size: 13px;">${month}</p>
+                        <p style="color: var(--text-light); margin: 0; font-size: 12px; line-height: 1.5;">${astroEvents[month]}</p>
+                    </div>
+                `;
+            });
+
+            html += `
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: rgba(236, 72, 153, 0.08); border-left: 3px solid var(--accent-pink); border-radius: 6px;">
+                    <h4 style="color: var(--accent-pink); margin: 0 0 8px 0;">✨ Eclipses y Lunas Llenas Importantes</h4>
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li style="padding: 6px 0; color: var(--text-light); font-size: 12px;">🌙 Lunas Llenas: Culminación, revelación, plenitud</li>
+                        <li style="padding: 6px 0; color: var(--text-light); font-size: 12px;">🌑 Lunas Nuevas: Nuevos comienzos, intención, plantación</li>
+                        <li style="padding: 6px 0; color: var(--text-light); font-size: 12px;">☄️ Eclipses: Cambios significativos, giros del destino</li>
+                    </ul>
+                </div>
+            `;
+
+            showResultsModal('Calendario Astrológico', '📅', html);
+            saveReading('Calendario Astrológico', monthNames.join(', '));
+        }
+
+        function handleCompatibilitySubmit(event) {
+            event.preventDefault();
+            
+            const otherName = document.getElementById('modal-other-name').value;
+            const dia = document.getElementById('modal-other-dia').value;
+            const mes = document.getElementById('modal-other-mes').value;
+            const ano = document.getElementById('modal-other-ano').value;
+
+            if (!dia || !mes || !ano || !otherName) {
+                alert('Por favor completa todos los datos');
+                return;
+            }
+
+            const profile = getStudyProfile();
+            const parts1 = profile.fechaNacimiento.split('-');
+            const month1 = parseInt(parts1[1]);
+            const day1 = parseInt(parts1[2]);
+            
+            const month2 = parseInt(mes);
+            const day2 = parseInt(dia);
+
+            const zodiac1Index = Math.floor((month1 - 1 + (day1 / 31)) * 12 / 12);
+            const zodiac2Index = Math.floor((month2 - 1 + (day2 / 31)) * 12 / 12);
+            
+            const sign1 = ZODIAC_SIGNS[zodiac1Index % 12];
+            const sign2 = ZODIAC_SIGNS[zodiac2Index % 12];
+            
+            const compatibility = Math.floor(50 + Math.random() * 50);
+            const compatibilityReason = Math.abs(zodiac1Index - zodiac2Index) <= 2 ? 'muy armoniosa' : Math.abs(zodiac1Index - zodiac2Index) <= 5 ? 'moderadamente compatible' : 'desafiante pero apasionante';
+
+            let html = `
+                <div style="margin-bottom: 20px; text-align: center; padding: 20px; background: rgba(236, 72, 153, 0.15); border-radius: 8px;">
+                    <div style="font-size: 36px; font-weight: bold; color: var(--accent-pink); margin-bottom: 10px;">${compatibility}%</div>
+                    <div style="color: var(--text-light); font-size: 14px;">Compatibilidad Astrológica</div>
+                    <div style="color: var(--text-muted); font-size: 12px; margin-top: 8px;">${profile.nombre} (${sign1}) & ${otherName} (${sign2})</div>
+                </div>
+
+                <div style="margin-bottom: 15px; padding: 15px; background: rgba(124, 58, 237, 0.08); border-left: 3px solid var(--accent-purple); border-radius: 6px;">
+                    <h4 style="color: var(--accent-gold); margin: 0 0 8px 0;">💫 Análisis Astrológico</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        La compatibilidad entre ${sign1} y ${sign2} es ${compatibilityReason}. 
+                        Ambos signos tienen perspectivas únicas que pueden complementarse o desafiarse mutuamente.
+                    </p>
+                </div>
+
+                <div style="padding: 15px; background: rgba(251, 191, 36, 0.08); border-left: 3px solid var(--accent-gold); border-radius: 6px;">
+                    <h4 style="color: var(--accent-gold); margin: 0 0 8px 0;">💡 Recomendación</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
+                        La astrología es una herramienta para la comprensión mutua. 
+                        El porcentaje refleja compatibilidad astrológica, pero el verdadero éxito de cualquier relación depende del esfuerzo, 
+                        respeto y amor mutuo de ambas personas.
+                    </p>
+                </div>
+            `;
+
+            showResultsModal('Resultado de Compatibilidad', '💕', html);
+            saveReading(`Compatibilidad - ${profile.nombre} & ${otherName}`, `${sign1} & ${sign2}: ${compatibility}%`);
         }
 
         // ============================================
