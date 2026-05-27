@@ -2381,8 +2381,6 @@
         // FUNCIÓN PARA MOSTRAR TAROT EN MODAL
         // ============================================
         function showTarotModal() {
-            const cardTypes = ['3 cartas', '5 cartas', 'Tirada de Sí/No'];
-            
             let html = `
                 <div style="margin-bottom: 20px; text-align: center; padding: 15px; background: rgba(124, 58, 237, 0.1); border-radius: 8px;">
                     <p style="color: var(--text-light); margin: 0; font-size: 13px; line-height: 1.6;">
@@ -2391,17 +2389,17 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px;">
-                    <button onclick="tarotReading('3'); closeResultsModal();" style="padding: 15px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
+                    <button onclick="tarotReadingModal('threeCards');" style="padding: 15px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
                         🃏 Tirada de 3 Cartas
                         <p style="color: var(--text-muted); font-size: 12px; margin: 5px 0 0 0;">Pasado, Presente, Futuro</p>
                     </button>
-                    <button onclick="tarotReading('5'); closeResultsModal();" style="padding: 15px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
-                        🃏 Tirada de 5 Cartas
+                    <button onclick="tarotReadingModal('workReading');" style="padding: 15px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
+                        🃏 Tirada de Situación
                         <p style="color: var(--text-muted); font-size: 12px; margin: 5px 0 0 0;">Visión más completa</p>
                     </button>
-                    <button onclick="tarotReading('yes-no'); closeResultsModal();" style="padding: 15px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
-                        🃏 Tirada Sí/No
-                        <p style="color: var(--text-muted); font-size: 12px; margin: 5px 0 0 0;">Respuesta directa</p>
+                    <button onclick="tarotReadingModal('loveReading');" style="padding: 15px; background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 8px; color: var(--text-light); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">
+                        🃏 Tirada de Amor
+                        <p style="color: var(--text-muted); font-size: 12px; margin: 5px 0 0 0;">Enfocada en relaciones</p>
                     </button>
                 </div>
 
@@ -2413,6 +2411,78 @@
             `;
 
             showResultsModal('Lectura de Tarot', '🃏', html);
+        }
+
+        // Nueva función para mostrar resultado tarot en modal
+        function tarotReadingModal(type) {
+            const readings = {
+                threeCards: {
+                    title: 'Pasado - Presente - Futuro',
+                    icon: '📿',
+                    cards: 3,
+                    positions: ['Pasado', 'Presente', 'Futuro']
+                },
+                loveReading: {
+                    title: 'Tirada de Amor',
+                    icon: '💕',
+                    cards: 3,
+                    positions: ['Cómo te Ves', 'Cómo Te Ve', 'El Futuro Juntos']
+                },
+                workReading: {
+                    title: 'Tirada de Situación',
+                    icon: '⚖️',
+                    cards: 4,
+                    positions: ['Tu Potencial', 'Retos', 'Oportunidades', 'Consejo']
+                }
+            };
+
+            const reading = readings[type];
+            const cards = [];
+
+            // Seleccionar cartas al azar
+            for (let i = 0; i < reading.cards; i++) {
+                const randomIndex = Math.floor(Math.random() * TAROT_CARDS.length);
+                cards.push(TAROT_CARDS[randomIndex]);
+            }
+
+            let html = `
+                <div style="margin-bottom: 20px; text-align: center; padding: 15px; background: rgba(251, 191, 36, 0.1); border-radius: 8px;">
+                    <div style="font-size: 24px; margin-bottom: 8px;">${reading.icon}</div>
+                    <div style="color: var(--text-light); font-size: 13px; font-weight: bold;">${reading.title}</div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                        ${cards.map((card) => `
+                            <div style="font-size: 48px; padding: 15px; background: rgba(124, 58, 237, 0.1); border: 2px solid rgba(124, 58, 237, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 0 20px rgba(124, 58, 237, 0.5)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+                                ${card.emoji}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    ${cards.map((card, idx) => `
+                        <div style="margin-bottom: 15px; padding: 15px; background: rgba(124, 58, 237, 0.08); border-left: 3px solid var(--accent-purple); border-radius: 6px;">
+                            <h4 style="color: var(--accent-gold); margin: 0 0 8px 0; font-size: 14px;">${reading.positions[idx]}</h4>
+                            <p style="color: var(--text-light); margin: 0 0 6px 0; font-weight: bold; font-size: 13px;">${card.name}</p>
+                            <p style="color: var(--text-muted); margin: 0 0 8px 0; font-size: 12px;"><strong>Significado:</strong> ${card.meaning}</p>
+                            <p style="color: var(--text-light); margin: 0; font-size: 12px; line-height: 1.5;"><strong>Tu Interpretación:</strong> ${card.interpretation}</p>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div style="padding: 15px; background: rgba(59, 130, 246, 0.08); border-left: 3px solid var(--accent-blue); border-radius: 6px;">
+                    <h4 style="color: var(--accent-blue); margin: 0 0 8px 0;">💫 Síntesis</h4>
+                    <p style="color: var(--text-light); margin: 0; font-size: 12px; line-height: 1.6;">
+                        Esta lectura te refleja aspectos de ti mismo. Las cartas no dicen lo que pasará, sino lo que necesitas saber.
+                        Tu acción consciente siempre es más poderosa que cualquier predicción.
+                    </p>
+                </div>
+            `;
+
+            showResultsModal(`${reading.title}`, reading.icon, html);
+            saveReading(`Tarot - ${reading.title}`, cards.map(c => c.name).join(', '));
         }
 
         // ============================================
