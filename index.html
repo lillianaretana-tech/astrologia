@@ -2551,6 +2551,8 @@
             const now = new Date();
             const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
             const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            const nextYear = currentYear + 1;
             
             const astroEvents = {
                 'Enero': '🎯 Año de Nuevos Inicios - Energía de Fuego',
@@ -2569,7 +2571,7 @@
 
             let html = `
                 <div style="margin-bottom: 20px; text-align: center; padding: 15px; background: rgba(251, 191, 36, 0.15); border-radius: 8px;">
-                    <div style="font-size: 20px; color: var(--accent-gold); margin-bottom: 8px;">📅 Calendario Astrológico 2024-2025</div>
+                    <div style="font-size: 20px; color: var(--accent-gold); margin-bottom: 8px;">📅 Calendario Astrológico ${currentYear}-${nextYear}</div>
                     <p style="color: var(--text-muted); margin: 0; font-size: 12px;">Eventos cósmicos relevantes para tu año</p>
                 </div>
 
