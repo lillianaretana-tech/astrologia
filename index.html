@@ -2540,7 +2540,7 @@
 
                 <div style="margin-top: 20px; padding: 15px; background: rgba(124, 58, 237, 0.15); border-radius: 8px; text-align: center;">
                     <p style="color: var(--text-light); margin: 0 0 12px 0; font-weight: bold; font-size: 13px;">🃏 ¡Comparte tu tirada!</p>
-                    ${getShareButtons(`${reading.title}`, `Acabo de recibir una lectura de Tarot 🃏\n\nCartas: ${cards.map(c => c.name).join(', ')}\n\n¿Quieres saber qué dicen las cartas sobre ti?`, '🃏')}
+                    ${getShareButtons(`Tirada de Tarot: ${reading.title}`, `Acabo de recibir una lectura de Tarot 🃏\n\nCartas: ${cards.map(c => c.name).join(', ')}\n\n¿Quieres saber qué dicen las cartas sobre ti?`, '🃏')}
                 </div>
             `;
 
@@ -2674,34 +2674,43 @@
         // ============================================
         // FUNCIONES DE COMPARTIR (VIRAL)
         // ============================================
-        function shareViral(title, message, icon = '✨') {
-            const text = `${icon} ${title}\n\n${message}\n\n🔮 Descubre tu destino: https://lilliaretan-tech.github.io/astrologia/ #AstroGuía`;
-            
-            return {
-                whatsapp: `https://wa.me/?text=${encodeURIComponent(text)}`,
-                instagram: `https://www.instagram.com/`,
-                copy: text
-            };
-        }
-
-        function shareToWhatsApp(title, message, icon = '✨') {
-            const urls = shareViral(title, message, icon);
-            window.open(urls.whatsapp, '_blank');
+        function shareToWhatsApp(text) {
+            const encoded = encodeURIComponent(text);
+            const url = `https://wa.me/?text=${encoded}`;
+            window.open(url, '_blank');
         }
 
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('✨ Copiado al portapapeles! Ahora puedes pegarlo donde quieras.');
-            });
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('✨ ¡Copiado! Ahora pega donde quieras.');
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('✨ ¡Copiado! Ahora pega donde quieras.');
         }
 
         function getShareButtons(title, message, icon = '✨') {
+            const fullText = `${icon} ${title}\n\n${message}\n\n🔮 Descubre tu destino: https://lilliaretan-tech.github.io/astrologia/ #AstroGuía`;
+            
             return `
                 <div class="share-button-group">
-                    <button class="share-btn-viral share-whatsapp" onclick="shareToWhatsApp('${title.replace(/'/g, "\\'")}', '${message.replace(/'/g, "\\'")}', '${icon}');">
+                    <button class="share-btn-viral share-whatsapp" onclick="shareToWhatsApp('${fullText.replace(/'/g, "\\'")}');">
                         💬 WhatsApp
                     </button>
-                    <button class="share-btn-viral share-copy" onclick="copyToClipboard('${icon} ${title}\\n\\n${message.replace(/'/g, "\\'")}\\n\\n🔮 Descubre tu destino: https://lilliaretan-tech.github.io/astrologia/ #AstroGuía');">
+                    <button class="share-btn-viral share-copy" onclick="copyToClipboard('${fullText.replace(/'/g, "\\'")}');">
                         📋 Copiar
                     </button>
                 </div>
