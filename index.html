@@ -1002,131 +1002,6 @@
                 font-size: 20px;
             }
         }
-
-        /* ============================================
-           DAILY CARD & STREAK WIDGET
-           ============================================ */
-        .daily-widget {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
-            border: 1px solid rgba(124, 58, 237, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.15);
-        }
-
-        .daily-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .daily-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .streak-badge {
-            background: rgba(251, 191, 36, 0.2);
-            border: 1px solid rgba(251, 191, 36, 0.4);
-            border-radius: 20px;
-            padding: 8px 16px;
-            font-size: 13px;
-            color: var(--accent-gold);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .daily-card-content {
-            background: rgba(10, 14, 39, 0.6);
-            border: 1px solid rgba(124, 58, 237, 0.2);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 12px;
-        }
-
-        .daily-card-emoji {
-            font-size: 36px;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .daily-card-name {
-            color: var(--accent-gold);
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .daily-card-meaning {
-            color: var(--text-light);
-            font-size: 12px;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .daily-number-section {
-            background: rgba(10, 14, 39, 0.6);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .daily-number {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--accent-blue);
-            margin-bottom: 8px;
-        }
-
-        .daily-number-label {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-
-        .daily-number-meaning {
-            color: var(--text-light);
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .daily-button {
-            width: 100%;
-            padding: 10px;
-            background: rgba(124, 58, 237, 0.3);
-            border: 1px solid rgba(124, 58, 237, 0.5);
-            border-radius: 6px;
-            color: var(--accent-gold);
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            transition: var(--transition);
-            margin-top: 10px;
-        }
-
-        .daily-button:hover {
-            background: rgba(124, 58, 237, 0.5);
-            box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
-        }
-
-        .streak-progress {
-            margin-top: 10px;
-            padding: 8px;
-            background: rgba(251, 191, 36, 0.1);
-            border-radius: 6px;
-            font-size: 12px;
-            color: var(--text-light);
-            text-align: center;
-        }
             border-color: var(--accent-purple);
         }
 
@@ -1298,8 +1173,21 @@
                     </div>
                 </div>
 
-                <!-- DAILY CARD & STREAK WIDGET (NUEVO SISTEMA VIRAL) -->
-                <div id="daily-widget-container" style="margin-bottom: 20px;"></div>
+                <!-- Reflexión Diaria -->
+                <div class="section">
+                    <div class="section-title">
+                        <span class="section-title-icon">🌙</span>
+                        Reflexión Astral del Día
+                    </div>
+                    <div class="card">
+                        <p id="daily-reflection" style="line-height: 1.8; color: var(--text-muted);"></p>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(124, 58, 237, 0.2);">
+                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
+                                <strong>Tu número del día:</strong> <span id="number-day" style="color: var(--accent-gold);"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Tracker de Bienestar -->
                 <div class="section">
@@ -2778,99 +2666,6 @@
         }
 
         // ============================================
-        // SISTEMA DE DAILY CARD, DAILY NUMBER Y STREAK
-        // ============================================
-        function getDailyData() {
-            const today = new Date().toDateString();
-            let dailyData = JSON.parse(localStorage.getItem('astroGuia_dailyData') || '{}');
-            
-            if (dailyData.lastDate !== today) {
-                // Nuevo día
-                dailyData = {
-                    lastDate: today,
-                    streakDays: (dailyData.streakDays || 0) + 1,
-                    dailyCard: null,
-                    dailyNumber: null,
-                    lastStreak: dailyData.streakDays || 0
-                };
-            }
-            
-            // Generar Carta del Día si no existe
-            if (!dailyData.dailyCard) {
-                const randomIndex = Math.floor(Math.random() * TAROT_CARDS.length);
-                dailyData.dailyCard = TAROT_CARDS[randomIndex];
-            }
-            
-            // Generar Número del Día si no existe
-            if (!dailyData.dailyNumber) {
-                const today_str = new Date().toLocaleDateString('es-ES').replace(/\//g, '');
-                let sum = 0;
-                for (let digit of today_str) {
-                    sum += parseInt(digit);
-                }
-                dailyData.dailyNumber = sum % 9 || 9;
-            }
-            
-            localStorage.setItem('astroGuia_dailyData', JSON.stringify(dailyData));
-            return dailyData;
-        }
-
-        function getDailyNumberMeaning(num) {
-            const meanings = {
-                1: 'Nuevos comienzos, liderazgo y acción',
-                2: 'Cooperación, paciencia y armonía',
-                3: 'Creatividad, expresión y alegría',
-                4: 'Estructura, seguridad y estabilidad',
-                5: 'Cambio, libertad y aventura',
-                6: 'Amor, responsabilidad y armonía',
-                7: 'Introspección, sabiduría y espiritualidad',
-                8: 'Poder, abundancia y logros',
-                9: 'Culminación, transformación y compasión'
-            };
-            return meanings[num] || 'Equilibrio cósmico';
-        }
-
-        function renderDailyWidget() {
-            const dailyData = getDailyData();
-            const card = dailyData.dailyCard;
-            const number = dailyData.dailyNumber;
-            const streak = dailyData.streakDays;
-
-            let html = `
-                <div class="daily-widget">
-                    <div class="daily-header">
-                        <div class="daily-title">✨ Tu Guía de Hoy</div>
-                        <div class="streak-badge">
-                            <span>🔥</span>
-                            <span>${streak} días</span>
-                        </div>
-                    </div>
-
-                    <div class="daily-card-content">
-                        <div class="daily-card-emoji">${card.emoji}</div>
-                        <div class="daily-card-name">${card.name}</div>
-                        <div class="daily-card-meaning">${card.meaning}</div>
-                        <button class="daily-button" onclick="saveReading('Carta del Día', '${card.name}');">
-                            💾 Guardar esta lectura
-                        </button>
-                    </div>
-
-                    <div class="daily-number-section">
-                        <div class="daily-number">${number}</div>
-                        <div class="daily-number-label">Tu Número del Día</div>
-                        <div class="daily-number-meaning">${getDailyNumberMeaning(number)}</div>
-                    </div>
-
-                    <div class="streak-progress">
-                        🔥 ¡Vas ${streak} días seguidos! Vuelve mañana para mantener tu racha cósmica 
-                    </div>
-                </div>
-            `;
-
-            return html;
-        }
-
-        // ============================================
         // ONBOARDING - MANEJO DEL FORMULARIO INICIAL
         // ============================================
 
@@ -3851,9 +3646,6 @@
                 : 'Los estudios actuales utilizan tu perfil. Puedes realizar una lectura para otra persona sin cambiar tus datos.';
             document.getElementById('return-own-profile-btn').style.display = guestActive ? 'inline-block' : 'none';
 
-            // Mostrar Daily Widget (Carta del Día + Racha Diaria)
-            document.getElementById('daily-widget-container').innerHTML = renderDailyWidget();
-            
             updateDailyReflection();
             generateAstrocalendar();
 
