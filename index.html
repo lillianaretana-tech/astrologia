@@ -2674,21 +2674,32 @@
         // ============================================
         // FUNCIONES DE COMPARTIR (VIRAL)
         // ============================================
-        function shareToWhatsApp(text) {
-            const encoded = encodeURIComponent(text);
+        let lastShareText = '';
+
+        function shareToWhatsApp() {
+            if (!lastShareText) {
+                alert('Error al compartir');
+                return;
+            }
+            const encoded = encodeURIComponent(lastShareText);
             const url = `https://wa.me/?text=${encoded}`;
             window.open(url, '_blank');
         }
 
-        function copyToClipboard(text) {
+        function copyToClipboard() {
+            if (!lastShareText) {
+                alert('Error al copiar');
+                return;
+            }
+            
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
+                navigator.clipboard.writeText(lastShareText).then(() => {
                     alert('✨ ¡Copiado! Ahora pega donde quieras.');
                 }).catch(() => {
-                    fallbackCopy(text);
+                    fallbackCopy(lastShareText);
                 });
             } else {
-                fallbackCopy(text);
+                fallbackCopy(lastShareText);
             }
         }
 
@@ -2703,14 +2714,14 @@
         }
 
         function getShareButtons(title, message, icon = '✨') {
-            const fullText = `${icon} ${title}\n\n${message}\n\n🔮 Descubre tu destino: https://lilliaretan-tech.github.io/astrologia/ #AstroGuía`;
+            lastShareText = `${icon} ${title}\n\n${message}\n\n🔮 Descubre tu destino: https://lilliaretan-tech.github.io/astrologia/ #AstroGuía`;
             
             return `
                 <div class="share-button-group">
-                    <button class="share-btn-viral share-whatsapp" onclick="shareToWhatsApp('${fullText.replace(/'/g, "\\'")}');">
+                    <button class="share-btn-viral share-whatsapp" onclick="shareToWhatsApp();">
                         💬 WhatsApp
                     </button>
-                    <button class="share-btn-viral share-copy" onclick="copyToClipboard('${fullText.replace(/'/g, "\\'")}');">
+                    <button class="share-btn-viral share-copy" onclick="copyToClipboard();">
                         📋 Copiar
                     </button>
                 </div>
