@@ -1231,6 +1231,9 @@
                     </div>
                 </div>
 
+                <!-- CARTA DEL DÍA + RACHA (FASE 3) -->
+                <div id="daily-card-section"></div>
+
                 <!-- Reflexión Diaria -->
                 <div class="section">
                     <div class="section-title">
@@ -2713,6 +2716,62 @@
             alert('✨ ¡Copiado! Ahora pega donde quieras.');
         }
 
+        // ============================================
+        // CARTA DEL DÍA + RACHA DIARIA (FASE 3)
+        // ============================================
+        function initDailyCard() {
+            const today = new Date().toDateString();
+            const dailyData = JSON.parse(localStorage.getItem('astroGuia_dailyData') || '{}');
+            
+            if (dailyData.lastDate !== today) {
+                // Nuevo día - incrementar racha
+                const card = TAROT_CARDS[Math.floor(Math.random() * TAROT_CARDS.length)];
+                dailyData.lastDate = today;
+                dailyData.dailyCard = card;
+                dailyData.streakDays = (dailyData.streakDays || 0) + 1;
+                localStorage.setItem('astroGuia_dailyData', JSON.stringify(dailyData));
+            }
+            
+            return dailyData;
+        }
+
+        function renderDailyCardWidget() {
+            const dailyData = initDailyCard();
+            const card = dailyData.dailyCard;
+            const streak = dailyData.streakDays || 1;
+
+            return `
+                <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%); border: 1px solid rgba(124, 58, 237, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(124, 58, 237, 0.15);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div style="font-size: 18px; font-weight: bold; color: var(--accent-gold); display: flex; align-items: center; gap: 8px;">
+                            ✨ Tu Guía de Hoy
+                        </div>
+                        <div style="background: rgba(251, 191, 36, 0.2); border: 1px solid rgba(251, 191, 36, 0.4); border-radius: 20px; padding: 8px 16px; font-size: 13px; color: var(--accent-gold); font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                            🔥 ${streak} días
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(10, 14, 39, 0.6); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 8px; padding: 15px; text-align: center;">
+                        <div style="font-size: 36px; margin-bottom: 8px; display: block;">${card.emoji}</div>
+                        <div style="color: var(--accent-gold); font-weight: bold; font-size: 14px; margin-bottom: 8px;">${card.name}</div>
+                        <div style="color: var(--text-light); font-size: 12px; line-height: 1.6; margin-bottom: 12px;">${card.meaning}</div>
+                        <div class="share-button-group">
+                            <button class="share-btn-viral share-whatsapp" onclick="lastShareText = '✨ Mi Carta del Día\\n\\n${card.name}\\n${card.meaning}\\n\\n🔮 Descubre tu destino: https://lilliaretan-tech.github.io/astrologia/ #AstroGuía'; shareToWhatsApp();">
+                                💬 Compartir
+                            </button>
+                            <button style="padding: 10px; background: rgba(124, 58, 237, 0.3); border: 1px solid rgba(124, 58, 237, 0.5); border-radius: 6px; color: var(--accent-gold); cursor: pointer; font-size: 12px; font-weight: bold; transition: all 0.3s; border: none;">
+                                💾 Guardar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 10px; padding: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 6px; font-size: 12px; color: var(--text-light); text-align: center;">
+                        🔥 ¡Vas ${streak} días seguidos! Vuelve mañana para mantener tu racha cósmica
+                    </div>
+                </div>
+            `;
+        }
+
         function getShareButtons(title, message, icon = '✨') {
             lastShareText = `${icon} ${title}\n\n${message}\n\n🔮 Descubre tu destino: https://lilliaretan-tech.github.io/astrologia/ #AstroGuía`;
             
@@ -3772,6 +3831,9 @@
                 ? `Lectura activa: ${studyProfile.nombre}. Tu perfil principal sigue siendo ${profile.nombre}.`
                 : 'Los estudios actuales utilizan tu perfil. Puedes realizar una lectura para otra persona sin cambiar tus datos.';
             document.getElementById('return-own-profile-btn').style.display = guestActive ? 'inline-block' : 'none';
+
+            // Mostrar Carta del Día + Racha
+            document.getElementById('daily-card-section').innerHTML = renderDailyCardWidget();
 
             updateDailyReflection();
             generateAstrocalendar();
